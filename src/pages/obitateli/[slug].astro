@@ -3,6 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Illustration from '../../components/Illustration.astro';
 import { CREATURES } from '../../data/creatures';
 import { SCENES } from '../../data/scenes';
+import { pathTo } from '../../lib/url';
 
 export function getStaticPaths() {
   return CREATURES.map((c) => ({ params: { slug: c.slug }, props: { creature: c } }));
@@ -34,7 +35,7 @@ const jsonLd = {
   <article class="creature">
     <header class="creature__hero">
       <p class="eyebrow">
-        <a href="/obitateli/" style="border:none; color:var(--c-text-dim);">← Атлас обитателей</a>
+        <a href={pathTo('/obitateli/')} style="border:none; color:var(--c-text-dim);">← Атлас обитателей</a>
       </p>
       <div class="creature__hero-grid">
         <div class="creature__hero-text">
@@ -81,7 +82,7 @@ const jsonLd = {
           <h2>На скролле</h2>
           <p>
             Этот вид появляется на главной странице на отметке <strong>{matchScene.depth} м</strong>.
-            <a href={`/#scene-${matchScene.id}`}>Перейти к сцене →</a>
+            <a href={`${pathTo('/')}#scene-${matchScene.id}`}>Перейти к сцене →</a>
           </p>
         </>
       )}

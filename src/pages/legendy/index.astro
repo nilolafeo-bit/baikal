@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { LEGENDS } from '../../data/legends';
+import { pathTo } from '../../lib/url';
 ---
 
 <BaseLayout
@@ -20,7 +21,7 @@ import { LEGENDS } from '../../data/legends';
     <ul class="legends-list">
       {LEGENDS.map((l) => (
         <li>
-          <a class="legend-card" href={`/legendy/${l.slug}/`}>
+          <a class="legend-card" href={pathTo(`/legendy/${l.slug}/`)}>
             <div class="legend-card__emoji" aria-hidden="true">{l.emoji}</div>
             <div class="legend-card__body">
               <span class="legend-card__tag">{l.tag}</span>

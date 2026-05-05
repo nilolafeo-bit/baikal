@@ -1,5 +1,6 @@
 ---
 import { NAV } from '../data/site';
+import { pathTo } from '../lib/url';
 
 interface Props {
   current?: string;
@@ -8,14 +9,14 @@ const { current } = Astro.props;
 ---
 
 <header class="site-header">
-  <a class="site-header__brand" href="/">
+  <a class="site-header__brand" href={pathTo('/')}>
     <span aria-hidden="true">🌊</span>
     <span>Глубина Байкала</span>
   </a>
   <nav class="site-header__nav" aria-label="Основная навигация">
     {NAV.map((item) => (
       <a
-        href={item.href}
+        href={pathTo(item.href)}
         aria-current={current === item.href ? 'page' : undefined}
       >
         {item.label}

@@ -1,14 +1,15 @@
 ---
+import { pathTo } from '../lib/url';
 const year = new Date().getFullYear();
 ---
 
 <footer class="site-footer">
   <nav class="site-footer__nav" aria-label="Подвал">
-    <a href="/">Скролл</a>
-    <a href="/obitateli/">Обитатели</a>
-    <a href="/legendy/">Легенды</a>
-    <a href="/test/">Тест</a>
-    <a href="/about/">О сайте</a>
+    <a href={pathTo('/')}>Скролл</a>
+    <a href={pathTo('/obitateli/')}>Обитатели</a>
+    <a href={pathTo('/legendy/')}>Легенды</a>
+    <a href={pathTo('/test/')}>Тест</a>
+    <a href={pathTo('/about/')}>О сайте</a>
   </nav>
   <p>
     © {year} «Глубина Байкала» — некоммерческий просветительский проект о самом глубоком озере планеты.

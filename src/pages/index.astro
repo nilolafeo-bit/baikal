@@ -6,6 +6,7 @@ import AchievementToast from '../components/AchievementToast.astro';
 import { SCENES, MAX_LAKE_DEPTH, MAX_SCROLL_DEPTH } from '../data/scenes';
 import { CREATURES, ENDEMIC_COUNT } from '../data/creatures';
 import { SITE } from '../data/site';
+import { pathTo } from '../lib/url';
 
 const endemicBySlug = new Map(CREATURES.map((c) => [c.slug, c.endemic]));
 
@@ -86,7 +87,7 @@ const SCALE = 0.55; // 0.55px на 1м -> ~5000px на 9000м
                 </div>
               )}
               {scene.creatureSlug && (
-                <a class="scene__link" href={`/obitateli/${scene.creatureSlug}/`}>
+                <a class="scene__link" href={pathTo(`/obitateli/${scene.creatureSlug}/`)}>
                   Подробнее об этом виде →
                 </a>
               )}
@@ -129,24 +130,24 @@ const SCALE = 0.55; // 0.55px на 1м -> ~5000px на 9000м
     </div>
     <div class="finale__actions">
       <button id="finale-share" type="button" class="finale__primary">Сгенерировать шер-карточку</button>
-      <a class="finale__secondary" href="/test/">Узнать, какой ты обитатель Байкала →</a>
+      <a class="finale__secondary" href={pathTo('/test/')}>Узнать, какой ты обитатель Байкала →</a>
     </div>
     <canvas id="finale-canvas" width="1200" height="630" hidden></canvas>
     <a id="finale-download" hidden href="#" download="glubina-baikala.png">Скачать PNG</a>
 
     <h3 class="finale__next-h">Что почитать дальше</h3>
     <div class="finale__next-grid">
-      <a class="card" href="/obitateli/">
+      <a class="card" href={pathTo('/obitateli/')}>
         <p class="eyebrow">Атлас</p>
         <p class="card__title">12 обитателей Байкала</p>
         <p class="card__desc">Подробные карточки эндемиков, которых ты встретил по дороге вниз.</p>
       </a>
-      <a class="card" href="/legendy/">
+      <a class="card" href={pathTo('/legendy/')}>
         <p class="eyebrow">Легенды</p>
         <p class="card__title">Мифы и истории</p>
         <p class="card__desc">Шаман-камень, экспедиция «Миров», «ихтиандры» и ветра с именами.</p>
       </a>
-      <a class="card" href="/test/">
+      <a class="card" href={pathTo('/test/')}>
         <p class="eyebrow">Тест</p>
         <p class="card__title">Какой ты обитатель Байкала?</p>
         <p class="card__desc">7 вопросов. На выходе — твой архетип и шер-картинка.</p>

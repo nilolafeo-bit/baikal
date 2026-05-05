@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { LEGENDS } from '../../data/legends';
+import { pathTo } from '../../lib/url';
 
 export function getStaticPaths() {
   return LEGENDS.map((l) => ({ params: { slug: l.slug }, props: { legend: l } }));
@@ -32,7 +33,7 @@ const jsonLd = {
   <article class="legend">
     <header class="legend__hero">
       <p class="eyebrow">
-        <a href="/legendy/" style="border:none; color:var(--c-text-dim);">← Все легенды</a>
+        <a href={pathTo('/legendy/')} style="border:none; color:var(--c-text-dim);">← Все легенды</a>
       </p>
       <div class="legend__emoji" aria-hidden="true">{legend.emoji}</div>
       <span class="legend__tag">{legend.tag}</span>
@@ -66,8 +67,8 @@ const jsonLd = {
     </div>
 
     <div class="legend__nav">
-      <a href="/legendy/" class="legend__nav-link">Вернуться к легендам</a>
-      <a href="/" class="legend__nav-link">К главному скроллу</a>
+      <a href={pathTo('/legendy/')} class="legend__nav-link">Вернуться к легендам</a>
+      <a href={pathTo('/')} class="legend__nav-link">К главному скроллу</a>
     </div>
   </article>
 
