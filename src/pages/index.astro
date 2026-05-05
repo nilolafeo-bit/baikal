@@ -4,8 +4,10 @@ import Illustration from '../components/Illustration.astro';
 import DepthMeter from '../components/DepthMeter.astro';
 import AchievementToast from '../components/AchievementToast.astro';
 import { SCENES, MAX_LAKE_DEPTH, MAX_SCROLL_DEPTH } from '../data/scenes';
-import { ENDEMIC_COUNT } from '../data/creatures';
+import { CREATURES, ENDEMIC_COUNT } from '../data/creatures';
 import { SITE } from '../data/site';
+
+const endemicBySlug = new Map(CREATURES.map((c) => [c.slug, c.endemic]));
 
 const jsonLd = [
   {
@@ -68,6 +70,7 @@ const SCALE = 0.55; // 0.55px на 1м -> ~5000px на 9000м
           data-depth={scene.depth}
           data-id={scene.id}
           data-creature={scene.creatureSlug ?? ''}
+          data-endemic={scene.creatureSlug && endemicBySlug.get(scene.creatureSlug) ? 'true' : 'false'}
           data-achievement={scene.achievement ? JSON.stringify(scene.achievement) : ''}
           data-share-line={scene.shareLine ?? ''}
           style={`min-height: ${heightPx}px;`}

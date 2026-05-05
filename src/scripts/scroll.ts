@@ -281,10 +281,11 @@ export function initScroll(): void {
 
       const id = sceneEl.dataset.id ?? '';
       const creature = sceneEl.dataset.creature ?? '';
+      const isEndemic = sceneEl.dataset.endemic === 'true';
       const achievementJson = sceneEl.dataset.achievement ?? '';
 
-      // Засчитать эндемика, если в сцене есть creatureSlug.
-      if (creature && !state.endemics.includes(creature)) {
+      // Засчитать эндемика, если в сцене есть creatureSlug и вид действительно эндемик.
+      if (creature && isEndemic && !state.endemics.includes(creature)) {
         state.endemics.push(creature);
         if (endemicsCountEl) endemicsCountEl.textContent = String(state.endemics.length);
         saveState(state);
@@ -326,7 +327,7 @@ export function initScroll(): void {
     btn.addEventListener('click', () => {
       const text = btn.dataset.shareText ?? '';
       const depth = btn.dataset.shareDepth ?? '';
-      const url = `${location.origin}${location.pathname}#scene-${btn.closest('.scene')?.id ?? ''}`;
+      const url = `${location.origin}${location.pathname}#${btn.closest('.scene')?.id ?? ''}`;
       void shareOrCopy(`${text} (${depth} м)`, url);
     });
   });
