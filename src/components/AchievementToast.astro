@@ -1,0 +1,66 @@
+---
+// Контейнер всплывашек ачивок. Сами тосты создаются скриптом scroll.ts.
+---
+<div id="achievement-toasts" class="achievements" aria-live="polite" aria-atomic="false"></div>
+
+<style>
+  .achievements {
+    position: fixed;
+    top: 4.5rem;
+    right: 1.25rem;
+    z-index: 40;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    pointer-events: none;
+  }
+  :global(.achievement-toast) {
+    pointer-events: auto;
+    background: rgba(3, 6, 15, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--c-accent);
+    border-radius: 14px;
+    padding: 0.7rem 1rem;
+    display: flex;
+    gap: 0.6rem;
+    align-items: center;
+    max-width: 320px;
+    transform: translateX(380px);
+    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.2, 1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+  }
+  :global(.achievement-toast.is-visible) {
+    transform: translateX(0);
+  }
+  :global(.achievement-toast__emoji) {
+    font-size: 1.4rem;
+  }
+  :global(.achievement-toast__text) {
+    display: flex;
+    flex-direction: column;
+  }
+  :global(.achievement-toast__title) {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  :global(.achievement-toast__sub) {
+    font-size: 0.78rem;
+    color: var(--c-text-dim);
+  }
+  @media (max-width: 720px) {
+    .achievements {
+      left: 0.75rem;
+      right: 5.5rem;
+      top: auto;
+      bottom: 1rem;
+    }
+    :global(.achievement-toast) {
+      transform: translateY(120px);
+      max-width: none;
+    }
+    :global(.achievement-toast.is-visible) {
+      transform: translateY(0);
+    }
+  }
+</style>

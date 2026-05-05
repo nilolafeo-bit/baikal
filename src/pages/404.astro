@@ -1,0 +1,24 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+---
+
+<BaseLayout title="Страница не найдена">
+  <section class="prose page">
+    <p class="eyebrow">404</p>
+    <h1>Эта страница ушла глубже, чем мы можем достать.</h1>
+    <p>
+      Попробуй вернуться <a href="/">к началу</a>, посмотреть <a href="/obitateli/">обитателей</a>, почитать <a href="/legendy/">легенды</a> или пройти <a href="/test/">тест</a>.
+    </p>
+  </section>
+
+  <style>
+    .page {
+      padding: clamp(3rem, 8vw, 6rem) 1.25rem;
+      text-align: center;
+    }
+    .page h1 {
+      max-width: 640px;
+      margin-inline: auto;
+    }
+  </style>
+</BaseLayout>

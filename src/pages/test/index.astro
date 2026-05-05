@@ -1,0 +1,153 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { QUESTIONS, ARCHETYPES } from '../../data/quiz';
+---
+
+<BaseLayout
+  title="Какой ты обитатель Байкала?"
+  description="Семь вопросов — и ты узнаёшь свой байкальский архетип. Нерпа, голомянка, омуль, бокоплав, эпишура, осётр, таймень или губка — кто ты?"
+  current="/test/"
+>
+  <div class="quiz" data-questions={JSON.stringify(QUESTIONS)} data-archetypes={JSON.stringify(ARCHETYPES)}>
+    <header class="quiz__hero" id="quiz-intro">
+      <p class="eyebrow">Тест на 2 минуты</p>
+      <h1>Какой ты обитатель Байкала?</h1>
+      <p class="quiz__lead">
+        Семь вопросов про привычки, страхи и идеальные выходные. На выходе — твой байкальский архетип, факт о нём и шер-карточка.
+      </p>
+      <button id="quiz-start" type="button" class="quiz__cta">Начать</button>
+    </header>
+
+    <section class="quiz__board" id="quiz-board" hidden>
+      <div class="quiz__progress">
+        <span id="quiz-progress-current">1</span> / <span id="quiz-progress-total">{QUESTIONS.length}</span>
+      </div>
+      <h2 class="quiz__question" id="quiz-question"></h2>
+      <ul class="quiz__options" id="quiz-options"></ul>
+    </section>
+
+    <section class="quiz__result" id="quiz-result" hidden>
+      <p class="eyebrow">Твой архетип</p>
+      <div class="quiz__result-emoji" id="quiz-result-emoji" aria-hidden="true"></div>
+      <h2 id="quiz-result-name"></h2>
+      <p class="quiz__result-tagline" id="quiz-result-tagline"></p>
+      <p class="quiz__result-description" id="quiz-result-description"></p>
+      <h3>Ты хорош в</h3>
+      <ul class="quiz__result-list" id="quiz-result-good"></ul>
+      <p class="quiz__result-fact" id="quiz-result-fact"></p>
+      <div class="quiz__result-actions">
+        <a id="quiz-result-link" class="quiz__result-link">Подробнее об этом виде →</a>
+        <button id="quiz-share" type="button" class="quiz__cta">Поделиться</button>
+        <button id="quiz-restart" type="button" class="quiz__secondary">Пройти ещё раз</button>
+      </div>
+    </section>
+  </div>
+
+  <style>
+    .quiz {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: clamp(2rem, 6vw, 4rem) 1.25rem;
+    }
+    .quiz__hero {
+      text-align: left;
+    }
+    .quiz__lead {
+      color: var(--c-text-dim);
+      font-size: clamp(1rem, 2vw, 1.15rem);
+    }
+    .quiz__cta {
+      background: var(--c-accent);
+      color: var(--bg-deep);
+      border-color: var(--c-accent);
+      font-weight: 600;
+      padding: 0.85rem 1.5rem;
+      margin-top: 1.5rem;
+    }
+    .quiz__cta:hover,
+    .quiz__cta:focus-visible {
+      background: var(--c-text);
+      border-color: var(--c-text);
+      color: var(--bg-deep);
+    }
+    .quiz__progress {
+      font-size: 0.85rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--c-text-faint);
+      margin-bottom: 1.5rem;
+    }
+    .quiz__question {
+      font-size: clamp(1.4rem, 3vw, 1.9rem);
+    }
+    .quiz__options {
+      list-style: none;
+      padding: 0;
+      margin: 1.5rem 0 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .quiz__options button {
+      width: 100%;
+      text-align: left;
+      padding: 1rem 1.2rem;
+      border-radius: 14px;
+      font-size: 1rem;
+    }
+    .quiz__options button:hover {
+      background: var(--c-accent);
+      color: var(--bg-deep);
+      border-color: var(--c-accent);
+    }
+    .quiz__result-emoji {
+      font-size: 4rem;
+      line-height: 1;
+      margin: 1rem 0;
+    }
+    .quiz__result-tagline {
+      color: var(--c-accent);
+      font-size: 1.15rem;
+      margin: 0 0 1rem;
+    }
+    .quiz__result-description {
+      color: var(--c-text);
+      font-size: 1.05rem;
+    }
+    .quiz__result-list {
+      padding-left: 1.2rem;
+      color: var(--c-text-dim);
+    }
+    .quiz__result-fact {
+      margin: 2rem 0;
+      padding: 1.25rem;
+      border-left: 3px solid var(--c-accent-warm);
+      background: rgba(255, 184, 120, 0.05);
+      border-radius: 0 12px 12px 0;
+      color: var(--c-text);
+    }
+    .quiz__result-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin-top: 2rem;
+    }
+    .quiz__result-link {
+      align-self: center;
+      font-size: 0.92rem;
+      color: var(--c-accent);
+      border-bottom-color: var(--c-accent);
+      margin-right: auto;
+    }
+    .quiz__secondary {
+      background: transparent;
+      color: var(--c-text-dim);
+      border: 1px solid var(--c-line);
+    }
+  </style>
+
+  <script>
+    import { initQuiz } from '../../scripts/quiz';
+    initQuiz();
+  </script>
+</BaseLayout>

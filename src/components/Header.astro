@@ -1,0 +1,25 @@
+---
+import { NAV } from '../data/site';
+
+interface Props {
+  current?: string;
+}
+const { current } = Astro.props;
+---
+
+<header class="site-header">
+  <a class="site-header__brand" href="/">
+    <span aria-hidden="true">🌊</span>
+    <span>Глубина Байкала</span>
+  </a>
+  <nav class="site-header__nav" aria-label="Основная навигация">
+    {NAV.map((item) => (
+      <a
+        href={item.href}
+        aria-current={current === item.href ? 'page' : undefined}
+      >
+        {item.label}
+      </a>
+    ))}
+  </nav>
+</header>
