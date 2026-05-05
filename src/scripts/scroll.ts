@@ -2,6 +2,8 @@
 // Считает текущую глубину, сохраняет состояние, выдаёт ачивки,
 // генерирует финальную шер-карточку.
 
+import { pathTo } from '../lib/url';
+
 declare global {
   interface Window {
     __BAIKAL__?: {
@@ -360,7 +362,7 @@ export function initScroll(): void {
       }
       void shareOrCopy(
         `Я опустился на ${state.maxDepth} м в Байкал. Найди своё дно: `,
-        location.origin,
+        location.origin + pathTo('/'),
       );
     });
   }

@@ -1,5 +1,6 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import { pathTo } from '../lib/url';
 ---
 
 <BaseLayout title="Страница не найдена">
@@ -7,7 +8,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     <p class="eyebrow">404</p>
     <h1>Эта страница ушла глубже, чем мы можем достать.</h1>
     <p>
-      Попробуй вернуться <a href="/">к началу</a>, посмотреть <a href="/obitateli/">обитателей</a>, почитать <a href="/legendy/">легенды</a> или пройти <a href="/test/">тест</a>.
+      Попробуй вернуться <a href={pathTo('/')}>к началу</a>, посмотреть <a href={pathTo('/obitateli/')}>обитателей</a>, почитать <a href={pathTo('/legendy/')}>легенды</a> или пройти <a href={pathTo('/test/')}>тест</a>.
     </p>
   </section>
 

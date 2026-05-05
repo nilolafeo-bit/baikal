@@ -1,5 +1,7 @@
+// ВНИМАНИЕ: пока домен glubinabaikala.ru не куплен, превью живёт на github.io.
+// Когда домен заработает — вернуть url: 'https://glubinabaikala.ru'.
 export const SITE = {
-  url: 'https://glubinabaikala.ru',
+  url: 'https://nilolafeo-bit.github.io/baikal',
   title: 'Глубина Байкала — прокрути до самого дна',
   shortTitle: 'Глубина Байкала',
   description:

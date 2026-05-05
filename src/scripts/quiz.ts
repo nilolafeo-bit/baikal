@@ -1,4 +1,5 @@
 import type { ArchetypeId, Archetype, QuizQuestion } from '../data/quiz';
+import { pathTo } from '../lib/url';
 
 interface QuizDataset {
   questions: QuizQuestion[];
@@ -132,7 +133,7 @@ export function initQuiz(): void {
     }
     if (resultFactEl) resultFactEl.textContent = arch.fact;
     if (resultLinkEl) {
-      resultLinkEl.href = `/obitateli/${arch.creatureSlug}/`;
+      resultLinkEl.href = pathTo(`/obitateli/${arch.creatureSlug}/`);
       resultLinkEl.textContent = `Подробнее: ${arch.name} →`;
     }
 
@@ -155,6 +156,6 @@ export function initQuiz(): void {
 
   shareBtn.addEventListener('click', () => {
     const name = resultNameEl?.textContent ?? 'мой архетип Байкала';
-    void shareOrCopy(`${name}. Узнай свой:`, `${location.origin}/test/`);
+    void shareOrCopy(`${name}. Узнай свой:`, `${location.origin}${pathTo('/test/')}`);
   });
 }

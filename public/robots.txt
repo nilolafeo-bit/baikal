@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://glubinabaikala.ru/sitemap-index.xml
+Sitemap: https://nilolafeo-bit.github.io/baikal/sitemap-index.xml

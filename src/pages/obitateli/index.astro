@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import Illustration from '../../components/Illustration.astro';
 import { CREATURES } from '../../data/creatures';
+import { pathTo } from '../../lib/url';
 ---
 
 <BaseLayout
@@ -20,7 +21,7 @@ import { CREATURES } from '../../data/creatures';
 
     <div class="grid">
       {CREATURES.map((c) => (
-        <a class="creature-card" href={`/obitateli/${c.slug}/`}>
+        <a class="creature-card" href={pathTo(`/obitateli/${c.slug}/`)}>
           <div class="creature-card__art">
             <Illustration id={c.illustration} ariaLabel={c.name} width={220} height={220} />
           </div>
