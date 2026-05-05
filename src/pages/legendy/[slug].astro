@@ -1,0 +1,133 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { LEGENDS } from '../../data/legends';
+
+export function getStaticPaths() {
+  return LEGENDS.map((l) => ({ params: { slug: l.slug }, props: { legend: l } }));
+}
+
+const { legend } = Astro.props as { legend: typeof LEGENDS[number] };
+
+// Простой парсинг markdown-bold внутри строк body
+function renderInline(text: string): string {
+  return text.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+}
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: legend.title,
+  description: legend.subtitle,
+  inLanguage: 'ru',
+  articleSection: 'Легенды Байкала',
+};
+---
+
+<BaseLayout
+  title={legend.title}
+  description={legend.subtitle}
+  current="/legendy/"
+  jsonLd={jsonLd}
+>
+  <article class="legend">
+    <header class="legend__hero">
+      <p class="eyebrow">
+        <a href="/legendy/" style="border:none; color:var(--c-text-dim);">← Все легенды</a>
+      </p>
+      <div class="legend__emoji" aria-hidden="true">{legend.emoji}</div>
+      <span class="legend__tag">{legend.tag}</span>
+      <h1>{legend.title}</h1>
+      <p class="legend__sub">{legend.subtitle}</p>
+    </header>
+
+    <div class="prose legend__body">
+      <p class="legend__intro"><strong>{legend.intro}</strong></p>
+
+      {legend.body.map((paragraph) => (
+        <p set:html={renderInline(paragraph)} />
+      ))}
+
+      {legend.pullQuote && (
+        <blockquote class="legend__quote">
+          <p>{legend.pullQuote}</p>
+        </blockquote>
+      )}
+
+      {legend.sources && legend.sources.length > 0 && (
+        <>
+          <h2>Источники</h2>
+          <ul>
+            {legend.sources.map((s) => (
+              <li>{s.url ? <a href={s.url} rel="noopener">{s.title}</a> : s.title}</li>
+            ))}
+          </ul>
+        </>
+      )}
+    </div>
+
+    <div class="legend__nav">
+      <a href="/legendy/" class="legend__nav-link">Вернуться к легендам</a>
+      <a href="/" class="legend__nav-link">К главному скроллу</a>
+    </div>
+  </article>
+
+  <style>
+    .legend {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: clamp(2rem, 6vw, 4rem) 1.25rem;
+    }
+    .legend__hero {
+      margin-bottom: 2rem;
+    }
+    .legend__emoji {
+      font-size: 4rem;
+      line-height: 1;
+      margin: 0 0 1rem;
+    }
+    .legend__tag {
+      display: inline-block;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--c-accent);
+      margin-bottom: 0.6rem;
+    }
+    .legend__sub {
+      color: var(--c-text-dim);
+      font-size: clamp(1.05rem, 2vw, 1.2rem);
+      margin: 0;
+    }
+    .legend__body {
+      margin: 2rem 0 4rem;
+    }
+    .legend__intro strong {
+      font-weight: 500;
+      color: var(--c-text);
+    }
+    .legend__quote {
+      margin: 2rem 0;
+      padding: 1.5rem 1.5rem 1.5rem 1.5rem;
+      border-left: 3px solid var(--c-accent-warm);
+      background: rgba(255, 184, 120, 0.05);
+      border-radius: 0 12px 12px 0;
+    }
+    .legend__quote p {
+      margin: 0;
+      font-style: italic;
+      font-size: 1.15rem;
+      color: var(--c-text);
+    }
+    .legend__nav {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      padding-top: 2rem;
+      border-top: 1px solid var(--c-line);
+    }
+    .legend__nav-link {
+      font-size: 0.92rem;
+      color: var(--c-text-dim);
+    }
+  </style>
+</BaseLayout>

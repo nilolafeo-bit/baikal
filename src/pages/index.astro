@@ -1,0 +1,432 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Illustration from '../components/Illustration.astro';
+import DepthMeter from '../components/DepthMeter.astro';
+import AchievementToast from '../components/AchievementToast.astro';
+import { SCENES, MAX_LAKE_DEPTH, MAX_SCROLL_DEPTH } from '../data/scenes';
+import { ENDEMIC_COUNT } from '../data/creatures';
+import { SITE } from '../data/site';
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: SITE.shortTitle,
+    url: SITE.url,
+    inLanguage: 'ru',
+    description: SITE.description,
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Place',
+    name: 'Озеро Байкал',
+    description:
+      'Самое глубокое озеро на планете — 1 642 метра. Содержит 19% мировых запасов жидкой пресной воды.',
+    sameAs: [
+      'https://ru.wikipedia.org/wiki/%D0%91%D0%B0%D0%B9%D0%BA%D0%B0%D0%BB',
+      'https://whc.unesco.org/en/list/754',
+    ],
+    geo: { '@type': 'GeoCoordinates', latitude: 53.5, longitude: 108.0 },
+  },
+];
+
+// Расчёт высот для каждой сцены: пиксели = глубина * scale.
+const SCALE = 0.55; // 0.55px на 1м -> ~5000px на 9000м
+---
+
+<BaseLayout
+  title={SITE.shortTitle}
+  description={SITE.description}
+  current="/"
+  bodyClass="scroll-body"
+  jsonLd={jsonLd}
+>
+  <div class="scroll-bg" aria-hidden="true"></div>
+  <div class="scroll-bioluminescence" id="bioluminescence" aria-hidden="true"></div>
+
+  <DepthMeter />
+  <AchievementToast />
+
+  <section class="hero">
+    <p class="eyebrow">Глубина Байкала</p>
+    <h1>Прокрути до самого дна.</h1>
+    <p class="hero__lead">
+      Самое глубокое озеро на планете — 1&nbsp;642 метра. Здесь живут эндемики, которых нигде больше нет, и легенды, которым тысячи лет. Поехали вниз.
+    </p>
+    <a href="#scene-surface" class="hero__cta">↓ Начать погружение</a>
+    <p class="hero__hint">Можно прокручивать колесом, листать пробелом или просто долго ждать. Всё, что найдёшь, будет считаться.</p>
+  </section>
+
+  <div class="scenes" id="scenes" data-max-depth={MAX_SCROLL_DEPTH}>
+    {SCENES.map((scene, i) => {
+      const next = SCENES[i + 1];
+      const heightPx = Math.max(420, ((next ? next.depth : MAX_SCROLL_DEPTH) - scene.depth) * SCALE);
+      return (
+        <section
+          class={`scene scene--${scene.kind}`}
+          id={`scene-${scene.id}`}
+          data-depth={scene.depth}
+          data-id={scene.id}
+          data-creature={scene.creatureSlug ?? ''}
+          data-achievement={scene.achievement ? JSON.stringify(scene.achievement) : ''}
+          data-share-line={scene.shareLine ?? ''}
+          style={`min-height: ${heightPx}px;`}
+        >
+          <div class="scene__sticky">
+            <div class="scene__inner">
+              <p class="scene__depth"><span>{scene.depth}</span><span class="scene__depth-unit">м</span></p>
+              <h2 class="scene__title">{scene.title}</h2>
+              <p class="scene__text">{scene.text}</p>
+              {scene.illustration && (
+                <div class="scene__art">
+                  <Illustration id={scene.illustration} ariaLabel={scene.title} width={280} height={280} />
+                </div>
+              )}
+              {scene.creatureSlug && (
+                <a class="scene__link" href={`/obitateli/${scene.creatureSlug}/`}>
+                  Подробнее об этом виде →
+                </a>
+              )}
+              {scene.shareLine && (
+                <button
+                  class="scene__share"
+                  type="button"
+                  data-share-text={scene.shareLine}
+                  data-share-depth={scene.depth}
+                >
+                  Поделиться
+                </button>
+              )}
+            </div>
+          </div>
+        </section>
+      );
+    })}
+  </div>
+
+  <section class="finale" id="finale">
+    <p class="eyebrow">ты прошёл байкал</p>
+    <h2>Открыть карту находок</h2>
+    <p class="finale__lead">
+      Сколько эндемиков ты встретил? На какой глубине ты потерял счёт? Получи личную глубинную карту и поделись ей.
+    </p>
+    <div class="finale__stats">
+      <div class="finale__stat">
+        <span class="finale__stat-value" id="finale-depth">0</span>
+        <span class="finale__stat-label">метров пройдено</span>
+      </div>
+      <div class="finale__stat">
+        <span class="finale__stat-value"><span id="finale-endemics">0</span><span class="finale__stat-total">/{ENDEMIC_COUNT}</span></span>
+        <span class="finale__stat-label">эндемиков встречено</span>
+      </div>
+      <div class="finale__stat">
+        <span class="finale__stat-value" id="finale-time">0:00</span>
+        <span class="finale__stat-label">время погружения</span>
+      </div>
+    </div>
+    <div class="finale__actions">
+      <button id="finale-share" type="button" class="finale__primary">Сгенерировать шер-карточку</button>
+      <a class="finale__secondary" href="/test/">Узнать, какой ты обитатель Байкала →</a>
+    </div>
+    <canvas id="finale-canvas" width="1200" height="630" hidden></canvas>
+    <a id="finale-download" hidden href="#" download="glubina-baikala.png">Скачать PNG</a>
+
+    <h3 class="finale__next-h">Что почитать дальше</h3>
+    <div class="finale__next-grid">
+      <a class="card" href="/obitateli/">
+        <p class="eyebrow">Атлас</p>
+        <p class="card__title">12 обитателей Байкала</p>
+        <p class="card__desc">Подробные карточки эндемиков, которых ты встретил по дороге вниз.</p>
+      </a>
+      <a class="card" href="/legendy/">
+        <p class="eyebrow">Легенды</p>
+        <p class="card__title">Мифы и истории</p>
+        <p class="card__desc">Шаман-камень, экспедиция «Миров», «ихтиандры» и ветра с именами.</p>
+      </a>
+      <a class="card" href="/test/">
+        <p class="eyebrow">Тест</p>
+        <p class="card__title">Какой ты обитатель Байкала?</p>
+        <p class="card__desc">7 вопросов. На выходе — твой архетип и шер-картинка.</p>
+      </a>
+    </div>
+  </section>
+
+  <style>
+    .scroll-body {
+      position: relative;
+    }
+    .scroll-bg {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      background: linear-gradient(
+        to bottom,
+        var(--bg-surface) 0%,
+        #0e2741 18%,
+        var(--bg-mid) 38%,
+        var(--bg-deep) 62%,
+        var(--bg-abyss) 100%
+      );
+      opacity: 1;
+    }
+    .scroll-bioluminescence {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.6s ease;
+    }
+    .scroll-bioluminescence.is-active {
+      opacity: 1;
+    }
+    .scroll-bioluminescence::before,
+    .scroll-bioluminescence::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background-image:
+        radial-gradient(circle at 12% 30%, rgba(98, 205, 255, 0.5) 0, transparent 1.2px),
+        radial-gradient(circle at 78% 12%, rgba(98, 205, 255, 0.4) 0, transparent 1.5px),
+        radial-gradient(circle at 32% 80%, rgba(98, 205, 255, 0.35) 0, transparent 1.4px),
+        radial-gradient(circle at 65% 65%, rgba(255, 184, 120, 0.5) 0, transparent 1.6px),
+        radial-gradient(circle at 88% 92%, rgba(98, 205, 255, 0.5) 0, transparent 1.3px),
+        radial-gradient(circle at 5% 55%, rgba(255, 184, 120, 0.4) 0, transparent 1.4px);
+      background-size: 600px 600px;
+      animation: float 18s linear infinite;
+    }
+    .scroll-bioluminescence::after {
+      background-size: 900px 900px;
+      animation-duration: 32s;
+      animation-direction: reverse;
+      opacity: 0.7;
+    }
+    @keyframes float {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-600px); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .scroll-bioluminescence::before,
+      .scroll-bioluminescence::after {
+        animation: none;
+      }
+    }
+
+    .hero {
+      max-width: 720px;
+      margin: 0 auto;
+      padding: clamp(3.5rem, 12vw, 7rem) 1.25rem clamp(2.5rem, 8vw, 5rem);
+      text-align: left;
+    }
+    .hero h1 {
+      margin-top: 0.4rem;
+    }
+    .hero__lead {
+      font-size: clamp(1.05rem, 2.2vw, 1.25rem);
+      color: var(--c-text-dim);
+      max-width: 560px;
+    }
+    .hero__cta {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 0.85rem 1.5rem;
+      border: 1px solid var(--c-text);
+      border-radius: 999px;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .hero__cta:hover {
+      background: var(--c-text);
+      color: var(--bg-deep);
+    }
+    .hero__hint {
+      margin-top: 1.5rem;
+      font-size: 0.85rem;
+      color: var(--c-text-faint);
+    }
+
+    .scenes {
+      display: flex;
+      flex-direction: column;
+    }
+    .scene {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      padding: 0 1.25rem;
+    }
+    .scene__sticky {
+      position: sticky;
+      top: 22vh;
+      width: 100%;
+    }
+    .scene__inner {
+      max-width: 540px;
+      margin: 0 auto;
+      padding: 0;
+    }
+    .scene__depth {
+      font-family: var(--font-display);
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      color: var(--c-text-faint);
+      margin: 0 0 0.4rem;
+      font-variant-numeric: tabular-nums;
+    }
+    .scene__depth-unit {
+      margin-left: 0.2em;
+    }
+    .scene__title {
+      font-size: clamp(1.5rem, 3.6vw, 2.3rem);
+      margin: 0 0 0.6rem;
+    }
+    .scene__text {
+      color: var(--c-text);
+      font-size: clamp(1rem, 1.6vw, 1.1rem);
+      line-height: 1.55;
+    }
+    .scene__art {
+      margin: 1.5rem 0;
+      display: flex;
+      justify-content: flex-start;
+    }
+    .scene__art :global(svg) {
+      width: clamp(220px, 50vw, 320px);
+      height: auto;
+    }
+    .scene__link {
+      display: inline-block;
+      margin-top: 0.6rem;
+      font-size: 0.92rem;
+      color: var(--c-accent);
+      border-bottom-color: var(--c-accent);
+    }
+    .scene__share {
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      padding: 0.5rem 1rem;
+    }
+
+    /* Окраска по типу сцены */
+    .scene--milestone .scene__title,
+    .scene--twist .scene__title {
+      color: var(--c-accent-warm);
+    }
+    .scene--building .scene__depth {
+      color: var(--c-accent);
+    }
+    .scene--twist .scene__inner {
+      border-left: 2px solid var(--c-accent-warm);
+      padding-left: 1.25rem;
+    }
+
+    .finale {
+      position: relative;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 6rem 1.25rem 4rem;
+      text-align: center;
+    }
+    .finale__lead {
+      max-width: 540px;
+      margin: 0 auto 2rem;
+      color: var(--c-text-dim);
+    }
+    .finale__stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin: 2rem 0;
+    }
+    @media (max-width: 540px) {
+      .finale__stats {
+        grid-template-columns: 1fr;
+      }
+    }
+    .finale__stat {
+      padding: 1.25rem;
+      border: 1px solid var(--c-line);
+      border-radius: 14px;
+    }
+    .finale__stat-value {
+      display: block;
+      font-family: var(--font-display);
+      font-size: clamp(1.5rem, 4vw, 2.3rem);
+      font-variant-numeric: tabular-nums;
+      font-weight: 600;
+    }
+    .finale__stat-total {
+      color: var(--c-text-faint);
+      font-size: 0.6em;
+    }
+    .finale__stat-label {
+      display: block;
+      margin-top: 0.4rem;
+      font-size: 0.78rem;
+      color: var(--c-text-dim);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+    }
+    .finale__actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+      margin: 2rem 0;
+    }
+    .finale__primary {
+      background: var(--c-accent);
+      color: var(--bg-deep);
+      border-color: var(--c-accent);
+      font-weight: 600;
+    }
+    .finale__secondary {
+      align-self: center;
+      border: none;
+      color: var(--c-text-dim);
+    }
+    .finale__next-h {
+      margin: 4rem 0 1.5rem;
+      font-size: 1rem;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--c-text-dim);
+    }
+    .finale__next-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+    .finale__next-grid .card__title {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      margin: 0.4rem 0 0.6rem;
+    }
+    .finale__next-grid .card__desc {
+      color: var(--c-text-dim);
+      font-size: 0.92rem;
+      margin: 0;
+    }
+  </style>
+
+  <script
+    is:inline
+    define:vars={{
+      MAX_SCROLL_DEPTH_VAR: MAX_SCROLL_DEPTH,
+      MAX_LAKE_DEPTH_VAR: MAX_LAKE_DEPTH,
+      ENDEMIC_TOTAL_VAR: ENDEMIC_COUNT,
+    }}
+  >
+    window.__BAIKAL__ = {
+      maxScrollDepth: MAX_SCROLL_DEPTH_VAR,
+      maxLakeDepth: MAX_LAKE_DEPTH_VAR,
+      endemicTotal: ENDEMIC_TOTAL_VAR,
+    };
+  </script>
+
+  <script>
+    import { initScroll } from '../scripts/scroll';
+    initScroll();
+  </script>
+</BaseLayout>

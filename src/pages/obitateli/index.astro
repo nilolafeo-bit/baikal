@@ -1,0 +1,122 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Illustration from '../../components/Illustration.astro';
+import { CREATURES } from '../../data/creatures';
+---
+
+<BaseLayout
+  title="Атлас обитателей Байкала"
+  description="12 эндемиков и удивительных видов Байкала. Голомянка, нерпа, эпишура, бокоплавы, осётр и другие — с подробными карточками и привязкой к глубине."
+  current="/obitateli/"
+>
+  <div class="page page--obitateli">
+    <header class="page__header">
+      <p class="eyebrow">Атлас</p>
+      <h1>Обитатели Байкала</h1>
+      <p class="page__lead">
+        Байкал — это <strong>1 550 видов животных и 1 085 видов растений</strong>, около 60% из которых не встречается больше нигде на планете. Здесь — самые узнаваемые и удивительные.
+      </p>
+    </header>
+
+    <div class="grid">
+      {CREATURES.map((c) => (
+        <a class="creature-card" href={`/obitateli/${c.slug}/`}>
+          <div class="creature-card__art">
+            <Illustration id={c.illustration} ariaLabel={c.name} width={220} height={220} />
+          </div>
+          <div class="creature-card__body">
+            {c.endemic && <span class="creature-card__badge">эндемик</span>}
+            <h2 class="creature-card__title">{c.name}</h2>
+            {c.latin && <p class="creature-card__latin">{c.latin}</p>}
+            <p class="creature-card__weird">{c.weird}</p>
+            <p class="creature-card__depth">от {c.depthMin} м до {c.depthMax} м</p>
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  <style>
+    .page {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: clamp(2rem, 6vw, 4rem) 1.25rem;
+    }
+    .page__header {
+      max-width: 720px;
+      margin: 0 auto 3rem;
+    }
+    .page__lead {
+      color: var(--c-text-dim);
+      font-size: clamp(1rem, 2vw, 1.15rem);
+      max-width: 640px;
+    }
+    .page__lead strong {
+      color: var(--c-text);
+      font-weight: 500;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 1.25rem;
+    }
+    .creature-card {
+      display: flex;
+      flex-direction: column;
+      background: rgba(255, 255, 255, 0.025);
+      border: 1px solid var(--c-line);
+      border-radius: 18px;
+      padding: 1.25rem;
+      transition: border-color 0.2s, transform 0.2s, background 0.2s;
+      border-bottom-color: var(--c-line);
+    }
+    .creature-card:hover {
+      border-color: var(--c-accent);
+      transform: translateY(-3px);
+      background: rgba(98, 205, 255, 0.04);
+    }
+    .creature-card__art {
+      align-self: center;
+      width: 180px;
+      height: 180px;
+      margin-bottom: 0.6rem;
+    }
+    .creature-card__art :global(svg) {
+      width: 100%;
+      height: 100%;
+    }
+    .creature-card__badge {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      background: rgba(255, 184, 120, 0.15);
+      color: var(--c-accent-warm);
+      border-radius: 999px;
+      margin-bottom: 0.6rem;
+    }
+    .creature-card__title {
+      font-size: 1.2rem;
+      margin: 0 0 0.2rem;
+    }
+    .creature-card__latin {
+      font-style: italic;
+      color: var(--c-text-faint);
+      font-size: 0.85rem;
+      margin: 0 0 0.6rem;
+    }
+    .creature-card__weird {
+      font-size: 0.95rem;
+      color: var(--c-text);
+      margin: 0 0 0.6rem;
+    }
+    .creature-card__depth {
+      margin: auto 0 0;
+      font-size: 0.78rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--c-text-faint);
+    }
+  </style>
+</BaseLayout>

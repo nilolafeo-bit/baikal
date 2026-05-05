@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#1a3850"/>
+      <stop offset="0.45" stop-color="#07182c"/>
+      <stop offset="1" stop-color="#000308"/>
+    </linearGradient>
+    <radialGradient id="glow" cx="0.85" cy="0.45" r="0.55">
+      <stop offset="0" stop-color="#62cdff" stop-opacity="0.35"/>
+      <stop offset="1" stop-color="#62cdff" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="1200" height="630" fill="url(#bg)"/>
+  <rect width="1200" height="630" fill="url(#glow)"/>
+
+  <!-- Биолюминесценция -->
+  <g fill="#62cdff">
+    <circle cx="120" cy="80" r="2" opacity="0.7"/>
+    <circle cx="220" cy="180" r="1.4" opacity="0.5"/>
+    <circle cx="450" cy="120" r="1.8" opacity="0.6"/>
+    <circle cx="900" cy="80" r="1.6" opacity="0.6"/>
+    <circle cx="1100" cy="240" r="1.2" opacity="0.5"/>
+    <circle cx="60" cy="540" r="1.5" opacity="0.6"/>
+    <circle cx="1050" cy="560" r="1.3" opacity="0.5"/>
+    <circle cx="1170" cy="120" r="1.6" opacity="0.6"/>
+    <circle cx="80" cy="320" r="1.2" opacity="0.5"/>
+    <circle cx="700" cy="540" r="1.4" opacity="0.5"/>
+  </g>
+  <g fill="#ffb878">
+    <circle cx="380" cy="540" r="1.4" opacity="0.55"/>
+    <circle cx="980" cy="400" r="1.4" opacity="0.55"/>
+    <circle cx="640" cy="80" r="1.2" opacity="0.55"/>
+  </g>
+
+  <!-- Eyebrow -->
+  <text x="80" y="140" font-family="'Manrope', system-ui, sans-serif" font-weight="500" font-size="22" letter-spacing="6" fill="#62cdff" text-transform="uppercase">ГЛУБИНА БАЙКАЛА</text>
+
+  <!-- Headline -->
+  <text x="80" y="260" font-family="'Manrope', system-ui, sans-serif" font-weight="700" font-size="84" fill="#e6edf6">Прокрути до</text>
+  <text x="80" y="358" font-family="'Manrope', system-ui, sans-serif" font-weight="700" font-size="84" fill="#e6edf6">самого дна.</text>
+
+  <!-- Подзаголовок -->
+  <text x="80" y="430" font-family="'Manrope', system-ui, sans-serif" font-weight="500" font-size="28" fill="#95a3b8">Самое глубокое озеро планеты — 1 642 м.</text>
+  <text x="80" y="468" font-family="'Manrope', system-ui, sans-serif" font-weight="500" font-size="28" fill="#95a3b8">Эндемики, легенды, твист, который меняет всё.</text>
+
+  <!-- URL -->
+  <text x="80" y="560" font-family="'Manrope', system-ui, sans-serif" font-weight="500" font-size="24" fill="#62cdff">glubinabaikala.ru</text>
+
+  <!-- Глубинная шкала справа -->
+  <line x1="1080" y1="80" x2="1080" y2="550" stroke="#5a6a82" stroke-width="2"/>
+  <line x1="1080" y1="80" x2="1080" y2="500" stroke="#62cdff" stroke-width="4"/>
+  <circle cx="1080" cy="500" r="8" fill="#ffb878"/>
+  <text x="1010" y="498" font-family="'Manrope', system-ui, sans-serif" font-weight="600" font-size="18" fill="#ffb878" text-anchor="end">1642 м</text>
+  <text x="1010" y="86" font-family="'Manrope', system-ui, sans-serif" font-weight="500" font-size="16" fill="#95a3b8" text-anchor="end">0 м</text>
+
+  <!-- Маленькие здания на левой шкале как декор -->
+  <g opacity="0.35" fill="#e6edf6">
+    <!-- Эверест / небольшой треугольник -->
+    <path d="M860 230 L900 170 L940 230 Z"/>
+    <text x="900" y="252" font-family="'Manrope', system-ui, sans-serif" font-weight="500" font-size="14" fill="#95a3b8" text-anchor="middle">Эверест</text>
+  </g>
+</svg>

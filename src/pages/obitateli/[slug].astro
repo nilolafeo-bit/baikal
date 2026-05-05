@@ -1,0 +1,177 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Illustration from '../../components/Illustration.astro';
+import { CREATURES } from '../../data/creatures';
+import { SCENES } from '../../data/scenes';
+
+export function getStaticPaths() {
+  return CREATURES.map((c) => ({ params: { slug: c.slug }, props: { creature: c } }));
+}
+
+const { creature } = Astro.props as { creature: typeof CREATURES[number] };
+const matchScene = SCENES.find((s) => s.creatureSlug === creature.slug);
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: creature.name,
+  description: creature.weird,
+  inLanguage: 'ru',
+  about: {
+    '@type': 'Thing',
+    name: creature.name,
+    alternateName: creature.latin,
+  },
+};
+---
+
+<BaseLayout
+  title={creature.name}
+  description={`${creature.name}: ${creature.weird}`}
+  current="/obitateli/"
+  jsonLd={jsonLd}
+>
+  <article class="creature">
+    <header class="creature__hero">
+      <p class="eyebrow">
+        <a href="/obitateli/" style="border:none; color:var(--c-text-dim);">← Атлас обитателей</a>
+      </p>
+      <div class="creature__hero-grid">
+        <div class="creature__hero-text">
+          {creature.endemic && <span class="creature__badge">эндемик Байкала</span>}
+          <h1>{creature.name}</h1>
+          {creature.latin && <p class="creature__latin">{creature.latin}</p>}
+          <p class="creature__weird">{creature.weird}</p>
+        </div>
+        <div class="creature__hero-art">
+          <Illustration id={creature.illustration} ariaLabel={creature.name} width={360} height={360} />
+        </div>
+      </div>
+    </header>
+
+    <div class="creature__meta">
+      <div>
+        <p class="creature__meta-label">Глубина</p>
+        <p class="creature__meta-value">{creature.depthMin}–{creature.depthMax} м</p>
+      </div>
+      <div>
+        <p class="creature__meta-label">Размер</p>
+        <p class="creature__meta-value">{creature.size}</p>
+      </div>
+      {creature.diet && (
+        <div>
+          <p class="creature__meta-label">Питание</p>
+          <p class="creature__meta-value">{creature.diet}</p>
+        </div>
+      )}
+      <div>
+        <p class="creature__meta-label">Где встречается</p>
+        <p class="creature__meta-value">{creature.habitat}</p>
+      </div>
+    </div>
+
+    <div class="prose creature__body">
+      <h2>Что важно знать</h2>
+      {creature.bio.map((p) => (
+        <p>{p}</p>
+      ))}
+
+      {matchScene && (
+        <>
+          <h2>На скролле</h2>
+          <p>
+            Этот вид появляется на главной странице на отметке <strong>{matchScene.depth} м</strong>.
+            <a href={`/#scene-${matchScene.id}`}>Перейти к сцене →</a>
+          </p>
+        </>
+      )}
+
+      {creature.sources && creature.sources.length > 0 && (
+        <>
+          <h2>Источники</h2>
+          <ul>
+            {creature.sources.map((s) => (
+              <li>{s.url ? <a href={s.url} rel="noopener">{s.title}</a> : s.title}</li>
+            ))}
+          </ul>
+        </>
+      )}
+    </div>
+  </article>
+
+  <style>
+    .creature {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: clamp(2rem, 6vw, 4rem) 1.25rem;
+    }
+    .creature__hero {
+      margin-bottom: 3rem;
+    }
+    .creature__hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 2rem;
+      align-items: center;
+    }
+    @media (max-width: 720px) {
+      .creature__hero-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .creature__hero-art {
+      display: flex;
+      justify-content: center;
+    }
+    .creature__hero-art :global(svg) {
+      width: 100%;
+      max-width: 360px;
+      height: auto;
+    }
+    .creature__badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      padding: 0.25rem 0.7rem;
+      background: rgba(255, 184, 120, 0.15);
+      color: var(--c-accent-warm);
+      border-radius: 999px;
+      margin-bottom: 1rem;
+    }
+    .creature__latin {
+      font-style: italic;
+      color: var(--c-text-faint);
+      margin: -0.3rem 0 1rem;
+    }
+    .creature__weird {
+      font-size: clamp(1.05rem, 2vw, 1.2rem);
+      color: var(--c-text);
+      max-width: 460px;
+    }
+    .creature__meta {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 1rem;
+      padding: 1.25rem;
+      border: 1px solid var(--c-line);
+      border-radius: 14px;
+      margin-bottom: 3rem;
+    }
+    .creature__meta-label {
+      font-size: 0.72rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--c-text-faint);
+      margin: 0 0 0.3rem;
+    }
+    .creature__meta-value {
+      font-family: var(--font-display);
+      font-weight: 500;
+      margin: 0;
+    }
+    .creature__body h2 {
+      margin-top: 2.5em;
+    }
+  </style>
+</BaseLayout>

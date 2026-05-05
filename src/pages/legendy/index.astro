@@ -1,0 +1,105 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { LEGENDS } from '../../data/legends';
+---
+
+<BaseLayout
+  title="Мифы и легенды Байкала"
+  description="Шаман-камень, экспедиция «Миров», подводные «ихтиандры», ветра с именами и тайна нерпы. Истории, которыми Байкал объяснял сам себя."
+  current="/legendy/"
+>
+  <div class="page">
+    <header class="page__header">
+      <p class="eyebrow">Легенды</p>
+      <h1>Истории, которые рассказывает Байкал</h1>
+      <p class="page__lead">
+        У этого озера 25 миллионов лет — и за это время вокруг него накопилось столько мифов, легенд и реальных историй, что они уже не помещаются в путеводитель. Ниже — самые интересные.
+      </p>
+    </header>
+
+    <ul class="legends-list">
+      {LEGENDS.map((l) => (
+        <li>
+          <a class="legend-card" href={`/legendy/${l.slug}/`}>
+            <div class="legend-card__emoji" aria-hidden="true">{l.emoji}</div>
+            <div class="legend-card__body">
+              <span class="legend-card__tag">{l.tag}</span>
+              <h2 class="legend-card__title">{l.title}</h2>
+              <p class="legend-card__sub">{l.subtitle}</p>
+              <p class="legend-card__intro">{l.intro}</p>
+            </div>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+
+  <style>
+    .page {
+      max-width: 920px;
+      margin: 0 auto;
+      padding: clamp(2rem, 6vw, 4rem) 1.25rem;
+    }
+    .page__header {
+      margin-bottom: 3rem;
+    }
+    .page__lead {
+      max-width: 640px;
+      color: var(--c-text-dim);
+      font-size: clamp(1rem, 2vw, 1.15rem);
+    }
+    .legends-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .legend-card {
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 1.25rem;
+      padding: 1.5rem;
+      border: 1px solid var(--c-line);
+      border-radius: 18px;
+      transition: border-color 0.2s, background 0.2s, transform 0.2s;
+    }
+    .legend-card:hover {
+      border-color: var(--c-accent);
+      background: rgba(98, 205, 255, 0.04);
+      transform: translateY(-2px);
+    }
+    .legend-card__emoji {
+      font-size: 2.5rem;
+      align-self: start;
+      line-height: 1;
+    }
+    .legend-card__tag {
+      display: inline-block;
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--c-accent);
+      margin-bottom: 0.4rem;
+    }
+    .legend-card__title {
+      font-size: 1.4rem;
+      margin: 0 0 0.2rem;
+    }
+    .legend-card__sub {
+      color: var(--c-text-dim);
+      margin: 0 0 0.6rem;
+      font-size: 0.95rem;
+    }
+    .legend-card__intro {
+      margin: 0;
+      color: var(--c-text);
+    }
+    @media (max-width: 600px) {
+      .legend-card {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</BaseLayout>

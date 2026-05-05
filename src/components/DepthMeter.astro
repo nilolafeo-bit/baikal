@@ -1,0 +1,134 @@
+---
+import { BUILDINGS } from '../data/buildings';
+import { MAX_LAKE_DEPTH, MAX_SCROLL_DEPTH } from '../data/scenes';
+const buildings = BUILDINGS.filter((b) => !b.note);
+---
+
+<aside class="depth-meter" aria-label="Текущая глубина">
+  <div class="depth-meter__inner">
+    <div class="depth-meter__display">
+      <div class="depth-meter__current" id="depth-current">0</div>
+      <div class="depth-meter__unit">м</div>
+    </div>
+    <div class="depth-meter__bar">
+      <span class="depth-meter__progress" id="depth-progress" style="height: 0%"></span>
+      {buildings.map((b) => (
+        <span
+          class="depth-meter__tick"
+          style={`bottom: ${(1 - b.height / MAX_SCROLL_DEPTH) * 100}%`}
+          data-label={`${b.name} · ${b.height} м`}
+        ></span>
+      ))}
+      <span
+        class="depth-meter__tick depth-meter__tick--bottom"
+        style={`bottom: ${(1 - MAX_LAKE_DEPTH / MAX_SCROLL_DEPTH) * 100}%`}
+        data-label={`Дно озера · ${MAX_LAKE_DEPTH} м`}
+      ></span>
+    </div>
+    <div class="depth-meter__counter" aria-live="polite">
+      <span id="depth-endemics-count">0</span><span class="depth-meter__counter-total">/<span id="depth-endemics-total">0</span></span>
+      <span class="depth-meter__counter-label">эндемиков</span>
+    </div>
+  </div>
+</aside>
+
+<style>
+  .depth-meter {
+    position: fixed;
+    top: 50%;
+    right: 1.25rem;
+    transform: translateY(-50%);
+    z-index: 30;
+    pointer-events: none;
+  }
+  .depth-meter__inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.8rem 0.7rem;
+    background: rgba(3, 6, 15, 0.65);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid var(--c-line);
+    border-radius: 999px;
+    pointer-events: auto;
+  }
+  .depth-meter__display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    line-height: 1;
+  }
+  .depth-meter__current {
+    font-family: var(--font-display);
+    font-variant-numeric: tabular-nums;
+    font-size: 1.05rem;
+    font-weight: 600;
+    min-width: 3.5ch;
+    text-align: center;
+  }
+  .depth-meter__unit {
+    font-size: 0.72rem;
+    color: var(--c-text-dim);
+    margin-top: 2px;
+  }
+  .depth-meter__bar {
+    position: relative;
+    width: 4px;
+    height: 220px;
+    background: var(--c-line);
+    border-radius: 2px;
+    overflow: visible;
+  }
+  .depth-meter__progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    background: linear-gradient(to bottom, #62cdff, #ffb878);
+    border-radius: 2px;
+    transition: height 0.05s linear;
+    height: 0%;
+  }
+  .depth-meter__tick {
+    position: absolute;
+    left: -3px;
+    width: 10px;
+    height: 1px;
+    background: var(--c-text-faint);
+  }
+  .depth-meter__tick--bottom {
+    background: var(--c-accent-warm);
+    height: 2px;
+  }
+  .depth-meter__counter {
+    font-size: 0.75rem;
+    color: var(--c-text-dim);
+    text-align: center;
+    line-height: 1.2;
+  }
+  .depth-meter__counter-total {
+    color: var(--c-text-faint);
+  }
+  .depth-meter__counter-label {
+    display: block;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+  @media (max-width: 720px) {
+    .depth-meter {
+      top: auto;
+      bottom: 1rem;
+      right: 1rem;
+      transform: none;
+    }
+    .depth-meter__bar {
+      height: 90px;
+    }
+    .depth-meter__counter-label {
+      display: none;
+    }
+  }
+</style>

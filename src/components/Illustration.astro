@@ -1,0 +1,333 @@
+---
+// SVG-иллюстрации эндемиков и сцен. Минималистичный стиль:
+// тонкие линии, тёплая окраска поверх тёмного фона.
+interface Props {
+  id: string;
+  width?: number;
+  height?: number;
+  caption?: string;
+  ariaLabel?: string;
+}
+const { id, width = 320, height = 320, ariaLabel, caption } = Astro.props;
+---
+
+<figure class="illustration" data-id={id}>
+  <svg
+    role="img"
+    aria-label={ariaLabel || id}
+    viewBox="0 0 320 320"
+    width={width}
+    height={height}
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <defs>
+      <linearGradient id={`grad-${id}`} x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#62cdff" stop-opacity="0.95" />
+        <stop offset="1" stop-color="#62cdff" stop-opacity="0.55" />
+      </linearGradient>
+      <radialGradient id={`glow-${id}`} cx="0.5" cy="0.5" r="0.5">
+        <stop offset="0" stop-color="#62cdff" stop-opacity="0.45" />
+        <stop offset="1" stop-color="#62cdff" stop-opacity="0" />
+      </radialGradient>
+    </defs>
+
+    {id === 'surface' && (
+      <g>
+        {/* Горы и сосны на горизонте */}
+        <path d="M0 230 L60 185 L100 210 L170 160 L230 200 L280 175 L320 215 L320 320 L0 320 Z" fill="#0b1c2e" opacity="0.85"/>
+        {/* Вода */}
+        <path d="M0 230 Q 80 222 160 230 T 320 230 L320 320 L0 320 Z" fill="#1a3850" opacity="0.7"/>
+        {/* Солнце */}
+        <circle cx="80" cy="100" r="34" fill="#ffd494" opacity="0.55"/>
+        <circle cx="80" cy="100" r="22" fill="#ffe5b8" opacity="0.85"/>
+        {/* Силуэт сосен */}
+        <g fill="#03060f">
+          <path d="M40 230 L48 198 L56 230 Z"/>
+          <path d="M52 230 L60 192 L68 230 Z"/>
+          <path d="M268 230 L274 200 L280 230 Z"/>
+          <path d="M286 230 L294 192 L302 230 Z"/>
+        </g>
+        {/* Шаман-камень */}
+        <path d="M195 232 L210 220 L220 232 L218 240 L200 240 Z" fill="#0a131e"/>
+      </g>
+    )}
+
+    {id === 'epishura' && (
+      <g transform="translate(160 170)">
+        <ellipse cx="0" cy="0" rx="70" ry="80" fill={`url(#glow-${id})`}/>
+        {/* Рачок-эпишура — крупный план */}
+        <g transform="rotate(-15)">
+          <path d="M-40 -2 Q -30 -22, 0 -16 Q 30 -12, 50 0 Q 30 12, 0 16 Q -30 22, -40 2 Z" fill="none" stroke={`url(#grad-${id})`} stroke-width="1.6"/>
+          <line x1="-40" y1="0" x2="-65" y2="-12" stroke="#62cdff" stroke-width="1"/>
+          <line x1="-40" y1="0" x2="-65" y2="12" stroke="#62cdff" stroke-width="1"/>
+          {/* антенны */}
+          <path d="M50 0 Q 70 -10, 88 -22" fill="none" stroke="#62cdff" stroke-width="1"/>
+          <path d="M50 0 Q 70 10, 88 22" fill="none" stroke="#62cdff" stroke-width="1"/>
+          {/* лапки */}
+          <line x1="-15" y1="14" x2="-22" y2="32" stroke="#62cdff" stroke-width="1"/>
+          <line x1="0" y1="16" x2="-2" y2="36" stroke="#62cdff" stroke-width="1"/>
+          <line x1="15" y1="14" x2="20" y2="32" stroke="#62cdff" stroke-width="1"/>
+          <line x1="28" y1="10" x2="38" y2="28" stroke="#62cdff" stroke-width="1"/>
+          {/* глаз */}
+          <circle cx="38" cy="-6" r="3" fill="#fff"/>
+        </g>
+      </g>
+    )}
+
+    {id === 'omul' && (
+      <g transform="translate(160 160)">
+        <g>
+          {/* тело */}
+          <path d="M-100 0 Q -80 -28, 30 -22 Q 90 -18, 110 0 Q 90 18, 30 22 Q -80 28, -100 0 Z" fill={`url(#grad-${id})`} opacity="0.85"/>
+          {/* хвост */}
+          <path d="M100 -8 L 130 -28 L 122 0 L 130 28 L 100 8 Z" fill="#62cdff" opacity="0.85"/>
+          {/* спинной плавник */}
+          <path d="M-10 -22 L 10 -45 L 30 -22 Z" fill="#62cdff" opacity="0.7"/>
+          {/* брюшной */}
+          <path d="M-30 18 L -20 32 L -8 18 Z" fill="#62cdff" opacity="0.6"/>
+          {/* глаз */}
+          <circle cx="-72" cy="-4" r="4" fill="#fff"/>
+          <circle cx="-72" cy="-4" r="2" fill="#03060f"/>
+          {/* боковая линия */}
+          <path d="M-90 0 Q -40 -2, 90 0" stroke="#fff" stroke-width="0.7" fill="none" opacity="0.4"/>
+        </g>
+      </g>
+    )}
+
+    {id === 'nerpa' && (
+      <g transform="translate(160 170)">
+        <ellipse cx="0" cy="0" rx="120" ry="80" fill={`url(#glow-${id})`}/>
+        {/* Тюлень в профиль */}
+        <g>
+          <path d="M-110 20 Q -110 -30, -50 -50 Q 50 -65, 100 -40 Q 105 -10, 95 10 Q 60 35, -10 40 Q -85 45, -110 20 Z" fill={`url(#grad-${id})`} opacity="0.9"/>
+          {/* Передний ласт */}
+          <path d="M-30 30 Q -20 60, 5 55 Q 15 45, 0 35 Z" fill="#62cdff" opacity="0.8"/>
+          {/* Задний ласт */}
+          <path d="M85 -5 Q 130 -20, 145 5 Q 130 15, 95 12 Z" fill="#62cdff" opacity="0.8"/>
+          {/* Морда */}
+          <path d="M-95 -10 Q -110 -5, -110 5 Q -100 10, -85 5 Z" fill="#62cdff" opacity="0.95"/>
+          {/* глаз */}
+          <circle cx="-85" cy="-12" r="3.5" fill="#fff"/>
+          <circle cx="-85" cy="-12" r="1.8" fill="#03060f"/>
+          {/* усы */}
+          <line x1="-95" y1="-2" x2="-115" y2="-6" stroke="#fff" stroke-width="0.7"/>
+          <line x1="-95" y1="2" x2="-115" y2="0" stroke="#fff" stroke-width="0.7"/>
+          <line x1="-95" y1="6" x2="-115" y2="6" stroke="#fff" stroke-width="0.7"/>
+        </g>
+      </g>
+    )}
+
+    {id === 'golomyanka' && (
+      <g transform="translate(160 160)">
+        <ellipse cx="0" cy="0" rx="140" ry="40" fill={`url(#glow-${id})`}/>
+        <g>
+          {/* Прозрачное тело */}
+          <path d="M-130 0 Q -100 -18, 80 -14 Q 120 -8, 130 0 Q 120 8, 80 14 Q -100 18, -130 0 Z" fill="rgba(98, 205, 255, 0.18)" stroke="#62cdff" stroke-width="1.2"/>
+          {/* «скелет» */}
+          <line x1="-100" y1="0" x2="100" y2="0" stroke="#62cdff" stroke-width="0.6" opacity="0.8" stroke-dasharray="2 3"/>
+          {/* Хвост */}
+          <path d="M120 -6 L 145 -22 L 138 0 L 145 22 L 120 6 Z" fill="#62cdff" opacity="0.75"/>
+          {/* Длинные грудные плавники */}
+          <path d="M-40 6 Q -30 40, -10 50 Q -25 30, -30 10" fill="none" stroke="#62cdff" stroke-width="1"/>
+          <path d="M-40 -6 Q -30 -40, -10 -50 Q -25 -30, -30 -10" fill="none" stroke="#62cdff" stroke-width="1"/>
+          {/* Глаз */}
+          <circle cx="-90" cy="-2" r="4" fill="#fff" opacity="0.95"/>
+          <circle cx="-90" cy="-2" r="2" fill="#03060f"/>
+        </g>
+      </g>
+    )}
+
+    {id === 'shirokolobka' && (
+      <g transform="translate(160 170)">
+        <ellipse cx="0" cy="0" rx="100" ry="60" fill={`url(#glow-${id})`}/>
+        {/* Большая голова, плоское тело */}
+        <path d="M-110 10 Q -120 -30, -80 -45 Q -30 -55, 30 -38 Q 80 -22, 105 -8 Q 110 4, 100 14 Q 60 30, 0 30 Q -60 26, -110 10 Z" fill={`url(#grad-${id})`} opacity="0.85"/>
+        {/* Глаз */}
+        <circle cx="-80" cy="-25" r="5" fill="#fff"/>
+        <circle cx="-80" cy="-25" r="2.5" fill="#03060f"/>
+        {/* Хвост */}
+        <path d="M100 -5 L 130 -22 L 122 0 L 130 22 L 100 5 Z" fill="#62cdff" opacity="0.7"/>
+        {/* Спинные плавники */}
+        <path d="M-30 -38 L 0 -55 L 30 -38" stroke="#62cdff" stroke-width="1.2" fill="none"/>
+      </g>
+    )}
+
+    {id === 'gammarus' && (
+      <g transform="translate(160 160)">
+        <ellipse cx="0" cy="0" rx="90" ry="80" fill={`url(#glow-${id})`}/>
+        {/* C-образный бокоплав */}
+        <path d="M-60 60 Q -90 0, -30 -40 Q 40 -60, 80 -30 Q 100 0, 60 50 Q 0 75, -60 60 Z" fill="none" stroke="#62cdff" stroke-width="1.6"/>
+        {/* Сегменты тела */}
+        {[-40, -25, -10, 5, 20, 35, 50].map((x) => (
+          <path d={`M${x} ${60 + (x < 0 ? -10 : 0)} Q ${x + 5} ${30}, ${x + 10} ${-20}`} stroke="#62cdff" stroke-width="0.7" fill="none" opacity="0.5"/>
+        ))}
+        {/* Лапки */}
+        {[-50, -30, -10, 10, 30, 50].map((x) => (
+          <line x1={x} y1="65" x2={x + 4} y2="95" stroke="#62cdff" stroke-width="0.8"/>
+        ))}
+        {/* антенны */}
+        <line x1="-30" y1="-40" x2="-60" y2="-80" stroke="#62cdff" stroke-width="1"/>
+        <line x1="-20" y1="-44" x2="-30" y2="-85" stroke="#62cdff" stroke-width="1"/>
+        {/* глаз */}
+        <circle cx="-25" cy="-30" r="3" fill="#fff"/>
+      </g>
+    )}
+
+    {id === 'osetr' && (
+      <g transform="translate(160 170)">
+        <g>
+          {/* длинное вытянутое тело */}
+          <path d="M-140 0 L -100 -18 Q 0 -26, 110 -16 L 140 -2 L 145 0 L 140 2 L 110 16 Q 0 26, -100 18 Z" fill={`url(#grad-${id})`} opacity="0.9"/>
+          {/* Костные щитки на спине */}
+          {[-80, -50, -20, 10, 40, 70, 95].map((x) => (
+            <path d={`M${x} -16 L ${x + 8} -22 L ${x + 16} -16 Z`} fill="#62cdff" opacity="0.85"/>
+          ))}
+          {/* Хвост — гетероцеркальный */}
+          <path d="M140 -2 L 175 -28 L 165 0 L 175 25 L 140 5 Z" fill="#62cdff" opacity="0.85"/>
+          {/* Усы под рылом */}
+          <line x1="-130" y1="6" x2="-150" y2="14" stroke="#62cdff" stroke-width="1"/>
+          <line x1="-125" y1="10" x2="-145" y2="22" stroke="#62cdff" stroke-width="1"/>
+          {/* глаз */}
+          <circle cx="-100" cy="-6" r="3.5" fill="#fff"/>
+          <circle cx="-100" cy="-6" r="1.6" fill="#03060f"/>
+        </g>
+      </g>
+    )}
+
+    {id === 'gubka' && (
+      <g transform="translate(160 200)">
+        <ellipse cx="0" cy="-20" rx="120" ry="60" fill={`url(#glow-${id})`}/>
+        {/* Подводные «деревья» — губки */}
+        <g fill="none" stroke="#62cdff" stroke-width="1.3">
+          <path d="M-80 90 Q -85 30, -70 -10 Q -55 -50, -45 -90"/>
+          <path d="M-70 -10 L -60 -30 M -65 -20 L -75 -55 M -55 -45 L -45 -75"/>
+          <path d="M-20 90 Q -25 40, -10 0 Q 5 -40, 15 -80"/>
+          <path d="M-10 0 L 0 -25 M -5 -20 L -15 -55 M 5 -45 L 15 -75"/>
+          <path d="M40 90 Q 35 50, 50 20 Q 65 -10, 80 -40"/>
+          <path d="M50 20 L 60 0 M 55 5 L 70 -25"/>
+        </g>
+      </g>
+    )}
+
+    {id === 'zheltokrylka' && (
+      <g transform="translate(160 160)">
+        <ellipse cx="0" cy="0" rx="120" ry="50" fill={`url(#glow-${id})`}/>
+        <g>
+          <path d="M-110 0 Q -90 -22, 30 -18 Q 90 -10, 110 0 Q 90 10, 30 18 Q -90 22, -110 0 Z" fill="#1d3a55" opacity="0.85"/>
+          {/* Жёлтые «крылья» */}
+          <path d="M-50 12 Q -60 50, -10 55 Q -20 35, -40 18 Z" fill="#ffb878" opacity="0.85"/>
+          <path d="M-50 -12 Q -60 -50, -10 -55 Q -20 -35, -40 -18 Z" fill="#ffb878" opacity="0.6"/>
+          {/* Хвост */}
+          <path d="M100 -6 L 130 -22 L 122 0 L 130 22 L 100 6 Z" fill="#ffb878" opacity="0.7"/>
+          {/* глаз */}
+          <circle cx="-80" cy="-4" r="4" fill="#fff"/>
+          <circle cx="-80" cy="-4" r="1.8" fill="#03060f"/>
+        </g>
+      </g>
+    )}
+
+    {id === 'taimen' && (
+      <g transform="translate(160 160)">
+        <g>
+          <path d="M-130 -2 Q -80 -30, 50 -28 Q 110 -22, 135 0 Q 110 22, 50 28 Q -80 30, -130 2 Z" fill={`url(#grad-${id})`} opacity="0.9"/>
+          {/* Хвост */}
+          <path d="M125 -10 L 160 -32 L 152 0 L 160 32 L 125 10 Z" fill="#62cdff" opacity="0.85"/>
+          {/* Спинной плавник + жировой */}
+          <path d="M-30 -28 L 0 -50 L 30 -28 Z" fill="#62cdff" opacity="0.7"/>
+          <circle cx="80" cy="-26" r="6" fill="#62cdff" opacity="0.6"/>
+          {/* Зубы */}
+          <path d="M-130 -2 L -135 -8 L -130 -10 L -125 -8 Z" fill="#fff"/>
+          <path d="M-128 4 L -132 10 L -126 12 L -122 10 Z" fill="#fff"/>
+          {/* глаз */}
+          <circle cx="-100" cy="-12" r="4" fill="#fff"/>
+          <circle cx="-100" cy="-12" r="1.8" fill="#03060f"/>
+        </g>
+      </g>
+    )}
+
+    {id === 'mir' && (
+      <g transform="translate(160 170)">
+        <ellipse cx="0" cy="0" rx="150" ry="80" fill={`url(#glow-${id})`}/>
+        {/* Глубоководный аппарат «Мир» — округлый корпус */}
+        <g>
+          <ellipse cx="0" cy="0" rx="110" ry="50" fill="#ffb878" opacity="0.95"/>
+          <ellipse cx="0" cy="0" rx="110" ry="50" fill="none" stroke="#03060f" stroke-width="1"/>
+          {/* Иллюминатор */}
+          <circle cx="-50" cy="-5" r="14" fill="#03060f"/>
+          <circle cx="-50" cy="-5" r="11" fill="#62cdff" opacity="0.6"/>
+          <circle cx="-50" cy="-5" r="7" fill="#fff" opacity="0.4"/>
+          {/* Манипулятор */}
+          <path d="M-110 5 Q -135 15, -150 28" stroke="#03060f" stroke-width="3" fill="none" stroke-linecap="round"/>
+          <path d="M-150 28 L -158 32 M -150 28 L -156 36" stroke="#03060f" stroke-width="2"/>
+          {/* «Уши» — пропеллеры */}
+          <circle cx="95" cy="-30" r="14" fill="none" stroke="#03060f" stroke-width="2"/>
+          <circle cx="95" cy="30" r="14" fill="none" stroke="#03060f" stroke-width="2"/>
+          <text x="0" y="6" font-family="Unbounded, monospace" font-size="14" font-weight="700" text-anchor="middle" fill="#03060f">МИР</text>
+          {/* Свет от прожектора */}
+          <path d="M-110 -5 L -200 -50 L -200 40 Z" fill="url(#glow-mir)" opacity="0.4"/>
+        </g>
+      </g>
+    )}
+
+    {id === 'bakteriomat' && (
+      <g transform="translate(160 200)">
+        <ellipse cx="0" cy="-10" rx="140" ry="80" fill={`url(#glow-${id})`}/>
+        {/* Гидротермальный «дымоход» */}
+        <g>
+          <path d="M-25 80 L -10 -40 L 10 -40 L 25 80 Z" fill="#1a0c0c" stroke="#ffb878" stroke-width="1"/>
+          {/* «Дым» */}
+          <path d="M-10 -40 Q -20 -60, -8 -80 Q 0 -90, 8 -80 Q 20 -60, 10 -40" fill="#ffb878" opacity="0.5"/>
+          <path d="M-15 -50 Q -30 -75, -20 -100" fill="none" stroke="#ffb878" stroke-width="1" opacity="0.4"/>
+          <path d="M15 -50 Q 30 -75, 20 -100" fill="none" stroke="#ffb878" stroke-width="1" opacity="0.4"/>
+          {/* Маты бактерий */}
+          <ellipse cx="-50" cy="80" rx="40" ry="6" fill="#ffb878" opacity="0.6"/>
+          <ellipse cx="50" cy="80" rx="40" ry="6" fill="#ffb878" opacity="0.6"/>
+          {/* мелкие пузырьки */}
+          {[
+            [-5, -90], [3, -85], [10, -100], [-15, -78], [18, -75]
+          ].map(([x, y]) => (
+            <circle cx={x} cy={y} r="2" fill="#fff" opacity="0.7"/>
+          ))}
+        </g>
+      </g>
+    )}
+
+    {/* Биолюминесценция: общий слой светящихся точек */}
+    <g class="bioluminescence" opacity="0.8">
+      <circle cx="40" cy="40" r="1.6" fill="#62cdff"/>
+      <circle cx="280" cy="60" r="1.2" fill="#fff"/>
+      <circle cx="60" cy="280" r="1.4" fill="#62cdff"/>
+      <circle cx="290" cy="260" r="1" fill="#fff"/>
+      <circle cx="20" cy="160" r="1.2" fill="#62cdff"/>
+    </g>
+  </svg>
+  {caption && <figcaption>{caption}</figcaption>}
+</figure>
+
+<style>
+  .illustration {
+    margin: 0;
+  }
+  .illustration figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.85rem;
+    color: var(--c-text-faint);
+    text-align: center;
+  }
+  .bioluminescence circle {
+    animation: blink 4s ease-in-out infinite;
+  }
+  .bioluminescence circle:nth-child(odd) {
+    animation-duration: 3s;
+    animation-delay: 0.7s;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 0.2; }
+    50% { opacity: 1; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bioluminescence circle {
+      animation: none;
+    }
+  }
+</style>
